@@ -296,6 +296,16 @@ def run_mlir(use_gpu, model_names, model_class, precision, num_threads, batch_si
     if use_gpu:
         backend = "cuda"
         backend_config = "cuda"
+    # To Save module
+    # mlir_path = os.path.join(ARITFACTS_DIR, "model_raw.mlir")
+    # with open(mlir_path, "wb") as output_file:
+    #     output_file.write(compiler_module)
+
+    # To Load module
+    # mlir_path = "model_raw.mlir"
+    # with open(mlir_path, "rb") as text_file:
+    #     compiler_module = text_file.read()
+    # flatbuffer_blob = compile_str(compiler_module, target_backends=["dylib-llvm-aot"])
 
     compiler_module = tfc.compile_module(BertModule(), exported_names = ["predict"], import_only=True)
     flatbuffer_blob = compile_str(compiler_module, target_backends=[backend], extra_args=["--iree-llvm-target-triple=x86_64-pc-linux-gnu", "--iree-llvm-target-cpu-features=host"])
