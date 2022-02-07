@@ -102,7 +102,6 @@ def run_onnxruntime(use_gpu, model_names, model_class, precision, num_threads, b
 
             if not is_valid_onnx_model:
                 continue
-
             ort_session = create_onnxruntime_session(onnx_model_file,
                                                      use_gpu,
                                                      enable_all_optimization=True,
@@ -274,7 +273,7 @@ def run_mlir(use_gpu, model_names, model_class, precision, num_threads, batch_si
         def __init__(self):
             super(BertModule, self).__init__()
             # Create a BERT trainer with the created network.
-            self.m = TFBertModel.from_pretrained("microsoft/MiniLM-L12-H384-uncased", from_pt=True)
+            self.m = TFBertModel.from_pretrained("bert-base-uncased", from_pt=True)
 
             # Invoke the trainer model on the inputs. This causes the layer to be built.
             self.m.predict = lambda x,y,z: self.m.call(input_ids=x, attention_mask=y, token_type_ids=z, training=False)
@@ -284,7 +283,7 @@ def run_mlir(use_gpu, model_names, model_class, precision, num_threads, batch_si
             return self.m.predict(input_ids, attention_mask, token_type_ids)
 
     # Prepping Data
-    tokenizer = BertTokenizer.from_pretrained("microsoft/MiniLM-L12-H384-uncased")
+    tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
     text = "Replace me by any text you'd like."
     encoded_input = tokenizer(text, padding='max_length', truncation=True, max_length=MAX_SEQUENCE_LENGTH)
     for key in encoded_input:
@@ -332,7 +331,7 @@ def run_mlir(use_gpu, model_names, model_class, precision, num_threads, batch_si
             "optimizer": "",
             "precision": precision,
             "io_binding": "",
-            "model_name": "microsoft/MiniLM-L12-H384-uncased",
+            "model_name": "bert-base-uncased",
             "inputs": 1,
             "threads": 1,
             "batch_size": batch_sizes[0],
